@@ -892,7 +892,7 @@
 		<div class="xbutton" onclick="toggleChat();" title="Hide the chat window">x</div>
 		<div id="chatBody" class="message"> 
 			<div class="inMessage" data-translate='welcome-to-vdo-ninja-chat'>
-				Welcome to VDO.Ninja! You can send text messages directly to connected peers from here.
+				Welcome to the Comms app! You can send text messages to everyone in the room from here.
 			</div>
 		</div>
 		<div id="chatSendBar">
@@ -1709,7 +1709,10 @@
 			additional2 += "&ad=1";
 		}
 		
-		var iframesrc = "./index.html?groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&chatbutton=0&vd=0&webcam&nvb&showlabel=skype&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label;
+		var chatmsg = "Welcome to the Comms app. Select a group to participate in.";
+		chatmsg = encodeURIComponent(chatmsg);
+		
+		var iframesrc = "./index.html?groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&chatbutton=0&vd=0&webcam&nvb&showlabel=skype&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label+"&chatmsg="+chatmsg;
 		
 		
 		if (roomname!==false){
