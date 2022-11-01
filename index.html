@@ -40,7 +40,7 @@
 		height: 100%;
 		width: 1280px;
 		
-		max-height: calc(100vh - 80px);
+		max-height: calc(100vh - 95px);
 	
 		background-color: #0002;
 		border-radius: 3px;
@@ -117,10 +117,12 @@
 		cursor: pointer;
 		user-select: none;
 		color: white;
-		font-size: 150%;
+		font-size: 250%;
 		font-family: Verdana;
-		line-height: 14px;
+		line-height: 30px;
+		z-index:20;
 	}
+	
 	#chatModule {
 		bottom: 0;
 		position: fixed;
@@ -137,6 +139,7 @@
 		border-radius: 10px;
 		padding: 10px;
 		transition: all .05s ease-in-out; 
+		max-height: 95vh;
 	}
 	#chatInput {
 		display: inline-block;
@@ -159,6 +162,14 @@
 		background-color:#CEF !important;
 	}
 	
+	.hotkey {
+		top:2px;
+	}
+	.groupsize{
+		pointer-events: none;
+		color: #BBB;
+		font-size: 13px;
+	}
 	input[type="checkbox"] {
 		width: 20px;
 		height: 20px;
@@ -201,7 +212,7 @@
 	#vdoninja {
 		max-width: calc(100vw - 4px - var(--chat-width));
 		width: 100vw;
-		height: calc(100vh - 102px);
+		height: calc(100vh - 117px);
 	}
 	
 	#viewlink {
@@ -293,7 +304,7 @@
 		border-radius: 10px;
 		box-shadow: 2px 2px 6px #273a4e, -2px -2px 6px #354e6a;
 		width: 135px;
-		height: 45px;
+		height: 60px;
 		background-color: #0004;
 		display: inline-block;
 		margin: 5px 10px 0 10px;
@@ -359,7 +370,7 @@
 		top: 92px;
 	}
 	.tFadeStart{
-		top: 92px;
+		top: 107px;
 	}
 	
 	@keyframes tFadeOut {
@@ -526,9 +537,11 @@
 	}
 	.groupContainer{
 		display:inline-block;
+		max-width: 50%;
 	}
 	.groupContainer>.group{
 		transform: scale(calc(  var(--aspect-ratio) / (16 / 9)), 1);
+		max-width: 35vw;
 	}
 	.groupContainer:hover>.group{
 		box-shadow: 0 0 6px #273a4e, 0 0px 6px #fffC;
@@ -841,7 +854,7 @@
 	}
 	body.mobile  #vdoninja {
 		max-width: calc(100vw - 20px);
-		max-height: calc(100vh - 102px);
+		max-height: calc(100vh - 117px);
 		height: 180px;
 	}
 	body.mobile #iframeContainer {
@@ -879,6 +892,7 @@
 		position: fixed;
 		bottom: 10px;
 		top: unset;
+		font-size: 150%;
 	}
 	
 	</style>
@@ -1048,10 +1062,16 @@
 	} else if (urlParams.has('mobile')){
 		mobile = true;
 	}
+	
+	if (screen.height && screen.width && (screen.height*screen.width<400000)){
+		mobile = true;
+	}
+	
 	if (mobile){
 		toggleChat();
 		document.body.classList.add("mobile");
 	}
+	
 	
 	var password = false;
 	if (urlParams.has('password') || urlParams.has('pass') || urlParams.has('pw') || urlParams.has('p')) {
@@ -1432,6 +1452,7 @@
 		"#44AACC"
 	];
 	
+	var remoteGroups = {};
 	
 	var initialgroups = {};
 	
@@ -1709,14 +1730,17 @@
 			additional2 += "&ad=1";
 		}
 		
-		var iframesrc = "https://vdo.ninja/alpha/index.html?groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&chatbutton=0&vd=0&webcam&nvb&showlabel=skype&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label;
+		var chatmsg = "Welcome to the Comms app. Select a group to participate in.";
+		chatmsg = encodeURIComponent(chatmsg);
+		
+		var iframesrc = "./index.html?controlbarspace&volumecontrol&sharperscreen&groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&chatbutton=0&vd=0&webcam&nvb&sstype=3&ssb&showlabel=toprounded&labelsize=85&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label+"&chatmsg="+chatmsg;
 		
 		
 		if (roomname!==false){
 			setStorage("savedRoom_comms", {roomname:roomname,password:password}, 9999);
 		}
 		
-		document.title = "Mixer: "+roomname;
+		document.title = "Room: "+roomname;
 		
 		for (var i in savedSession.groups){
 			drawGroup(savedSession.groups[i]);
@@ -1749,7 +1773,6 @@
 			if (e.source != iframe.contentWindow){return} // reject messages send from other iframes
 			
 			
-			
 			if ("gotChat" in e.data){
 				messageList.push(e.data.gotChat);
 				messageList = messageList.slice(-100);
@@ -1767,6 +1790,68 @@
 						iframe.contentWindow.postMessage({"function":"eval", "value":'getById("mutevideobutton").style.setProperty("display", "block", "important");'}, '*');
 					}
 				} 
+				
+				var updateGroupSize = false;
+				if (e.data.action === "remote-group-change"){
+					if (e.data.value && (typeof e.data.value === "object")){
+						for (var group in remoteGroups){
+							var index = remoteGroups[group].indexOf(e.data.streamID);
+							if (index > -1) { // only splice array when item is found
+							  remoteGroups[group].splice(index, 1); // 2nd parameter means remove one item only
+							  updateGroupSize = true;
+							}
+						}
+						e.data.value.forEach(group =>{
+							group=group+"";
+							if (!(group in remoteGroups)){
+								remoteGroups[group] = [e.data.streamID];
+								updateGroupSize = true;
+							} else if (!remoteGroups[group].includes(e.data.streamID)){
+								remoteGroups[group].push(e.data.streamID);
+								updateGroupSize = true;
+							}
+						});
+					}
+				} else if (e.data.action === "view-connection-info"){
+					for (var group in remoteGroups){
+						var index = remoteGroups[group].indexOf(e.data.streamID);
+						if (index > -1) { // only splice array when item is found
+						  remoteGroups[group].splice(index, 1); // 2nd parameter means remove one item only
+						  updateGroupSize = true;
+						}
+					}
+					if (e.data.value && e.data.value.initial_group){
+						e.data.value.initial_group.split(",").forEach(group =>{
+							if (!(group in remoteGroups)){
+								remoteGroups[group] = [e.data.streamID]
+								updateGroupSize = true;
+							} else if (!remoteGroups[group].includes(e.data.streamID)){
+								remoteGroups[group].push(e.data.streamID);
+								updateGroupSize = true;
+							}
+						});
+					}
+				} else if (e.data.value && (e.data.action === "end-view-connection")){
+					for (var group in remoteGroups){
+						var index = remoteGroups[group].indexOf(e.data.value);
+						if (index > -1) { // only splice array when item is found
+						  remoteGroups[group].splice(index, 1); // 2nd parameter means remove one item only
+						  updateGroupSize = true;
+						}
+					}
+				} 
+				
+				if (updateGroupSize){
+					for (var group in remoteGroups){
+						var ele = document.getElementById("containermenu").querySelector(".group[data-group='"+group+"'] .groupsize");
+						ele.title = "totla guest:"+remoteGroups[group].length;
+						if (remoteGroups[group].length){
+							ele.innerText = "🗣 "+remoteGroups[group].length;
+						} else {
+							ele.innerText = "";
+						}
+					}
+				}
 				
 				if ("joining-room" == e.data.action){
 					if (!setupYet){
@@ -1804,9 +1889,6 @@
 				}
 				
 			}
-			
-		
-		
 		});
 	}
 	
@@ -1888,7 +1970,7 @@
 		group.classList.add("group");
 		group.innerText = "group: "+groupID;
 		group.onclick = remoteActivate;
-		
+		group.title = "Activate this group; the view scene link will be updated";
 		
 		
 		<!-- var editButton = document.createElement("button"); -->
@@ -1910,16 +1992,19 @@
 			<!-- addOldElement(JSON.parse(this.parentNode.querySelector("group").group)); -->
 		<!-- } -->
 		
-		
 		var hotkey = document.createElement("div");
 		hotkey.title = "Keyboard hotkey value. Drag elements around to change order.";
+		hotkey.classList = "hotkey";
 		
-		group.title = "Activate this group; the view scene link will be updated";
+		var groupsize = document.createElement("div");
+		groupsize.classList = "groupsize";
+		
 		
 		var groupContainer = document.createElement("div");
 		//groupContainer.appendChild(editButton);
 		groupContainer.appendChild(group);
 		groupContainer.appendChild(hotkey);
+		group.appendChild(groupsize);
 		groupContainer.classList.add("groupContainer");
 		
 		if (savedSession.activeGroups.includes(groupID)){
