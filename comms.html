@@ -17,7 +17,8 @@
 	<style>
 	:root{
 		--aspect-ratio: 1.7777777777;
-		--chat-width: 450px;
+		--chat-width: 400px;
+		--chat-filler: 0px;
 	}
 	
 	body {
@@ -127,8 +128,9 @@
 		bottom: 0;
 		position: fixed;
 		margin: 10px;
+		margin-left:0;
 		align-self: center;
-		width: 400px;
+		width: var(--chat-width);
 		max-width: calc(100% - 40px);
 		z-index:3;
 		height: calc(100vh - 40px);
@@ -210,7 +212,7 @@
 		box-shadow: 1px 1px 3px #1b1b1b, -1px -1px 3px #1d1d1d;
 	}
 	#vdoninja {
-		max-width: calc(100vw - 4px - var(--chat-width));
+		max-width: calc(100vw - 54px - var(--chat-width) + var(--chat-filler));
 		width: 100vw;
 		height: calc(100vh - 117px);
 	}
@@ -996,12 +998,16 @@
 	}
 	
 	function toggleChat(){
-		document.getElementById("chatModule").classList.toggle("fadeout");
+		document.getElementById("chatModule").classList.toggle("hidden");
 		document.getElementById("chatModuleButton").classList.toggle("hidden");
-		if (document.getElementById("chatModule").classList.contains("fadeout")){
+		
+		if (document.getElementById("chatModule").classList.contains("hidden")){
 			document.documentElement.style.setProperty('--chat-width', "0px");
+			document.documentElement.style.setProperty('--chat-filler', "33px");
+			
 		} else {
-			document.documentElement.style.setProperty('--chat-width', "450px");
+			document.documentElement.style.setProperty('--chat-width', "400px");
+			document.documentElement.style.setProperty('--chat-filler', "0px");
 		}
 	}
 	
@@ -1068,8 +1074,9 @@
 	}
 	
 	if (mobile){
-		toggleChat();
+		//toggleChat();
 		document.body.classList.add("mobile");
+		//getById("chatModule").classList.add("hidden");
 	}
 	
 	
@@ -1727,13 +1734,15 @@
 		}
 		
 		if (mobile){
-			additional2 += "&ad=1";
+			additional2 += "&ad=1&chatbutton=1";
+		} else {
+			additional2 += "&chatbutton=0";
 		}
 		
 		var chatmsg = "Welcome to the Comms app. Select a group to participate in.";
 		chatmsg = encodeURIComponent(chatmsg);
 		
-		var iframesrc = "./index.html?controlbarspace&volumecontrol&sharperscreen&groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&chatbutton=0&vd=0&webcam&nvb&sstype=3&ssb&showlabel=toprounded&labelsize=85&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label+"&chatmsg="+chatmsg;
+		var iframesrc = "./index.html?controlbarspace&volumecontrol&sharperscreen&groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&vd=0&webcam&nvb&sstype=3&ssb&showlabel=toprounded&labelsize=85&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label+"&chatmsg="+chatmsg;
 		
 		
 		if (roomname!==false){
@@ -1746,7 +1755,9 @@
 			drawGroup(savedSession.groups[i]);
 		}
 		
-		document.getElementById("chatModule").classList.remove("hidden");
+		if (!mobile){
+			document.getElementById("chatModule").classList.remove("hidden");
+		}
 		
 		iframe.onload = function(){
 			iframe.contentWindow.postMessage({ groups: savedSession.groups }, "*"); 
