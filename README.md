@@ -1,4 +1,1 @@
-Killing this repository.  WIll keep the app within vdo.ninja
-
-# comms.cam
-Branched version of the comms app
+Deprecating this repository.  Will keep the app within vdo.ninja, so you can find the current version there
