@@ -906,9 +906,9 @@
 		flex: 0 0 auto;
 		gap: 0;
 		width: 100vw;
-		height: 92px;
-		min-height: 92px;
-		padding: 0 6px 6px 6px;
+		height: 64px;
+		min-height: 64px;
+		padding: 0 5px 5px 5px;
 		overflow-x: auto;
 		overflow-y: hidden;
 		-webkit-overflow-scrolling: touch;
@@ -918,18 +918,18 @@
 	body.mobile #containermenu .groupContainer {
 		flex: 0 0 auto;
 		max-width: none;
-		min-width: 136px;
+		min-width: 122px;
 	}
 
 	body.mobile #containermenu .groupContainer > .group {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 124px;
+		width: 112px;
 		max-width: none;
-		height: 54px;
-		margin: 8px 6px 0 6px;
-		padding: 8px 28px 8px 10px;
+		height: 48px;
+		margin: 8px 5px 0 5px;
+		padding: 7px 26px 7px 9px;
 		transform: none;
 		line-height: 1.15;
 		overflow: hidden;
@@ -940,6 +940,10 @@
 		max-width: 100%;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+
+	body.mobile .hotkey {
+		display: none;
 	}
 
 	body.mobile .groupview {
@@ -1078,11 +1082,12 @@
 	body.mobile #chatModule {
 		left: 10px;
 		right: 10px;
-		bottom: calc(10px + env(safe-area-inset-bottom));
+		top: 72px;
+		bottom: auto;
 		width: auto;
 		max-width: none;
-		height: min(70vh, 480px);
-		height: min(70dvh, 480px);
+		height: calc(100vh - 82px);
+		height: calc(100dvh - 82px);
 		margin: 0;
 		padding: 10px;
 		box-sizing: border-box;
@@ -1115,7 +1120,62 @@
 		flex: 0 0 auto;
 		margin: 0;
 	}
-	
+
+	@media (max-width: 360px) {
+		body.mobile #containermenu {
+			height: 58px;
+			min-height: 58px;
+			padding: 0 4px 4px 4px;
+		}
+
+		body.mobile #containermenu .groupContainer {
+			min-width: 108px;
+		}
+
+		body.mobile #containermenu .groupContainer > .group {
+			width: 100px;
+			height: 44px;
+			margin: 7px 4px 0 4px;
+			padding: 6px 23px 6px 8px;
+			font-size: 14px;
+		}
+
+		body.mobile .groupview {
+			width: 23px;
+			height: 23px;
+		}
+
+		body.mobile #chatModule {
+			top: 64px;
+			height: calc(100vh - 74px);
+			height: calc(100dvh - 74px);
+		}
+	}
+
+	@media (max-height: 500px) {
+		body.mobile #containermenu {
+			height: 56px;
+			min-height: 56px;
+		}
+
+		body.mobile #containermenu .groupContainer {
+			min-width: 112px;
+		}
+
+		body.mobile #containermenu .groupContainer > .group {
+			width: 104px;
+			height: 42px;
+			margin-top: 6px;
+			font-size: 14px;
+		}
+
+	body.mobile #chatModule {
+		top: 62px;
+		height: calc(100vh - 72px);
+		height: calc(100dvh - 72px);
+	}
+}
+
 	</style>
 </head>
 <body>
@@ -1217,15 +1277,18 @@
 	}
 	
 	function toggleChat(){
-		document.getElementById("chatModule").classList.toggle("hidden");
-		document.getElementById("chatModuleButton").classList.toggle("hidden");
-		
-		if (document.getElementById("chatModule").classList.contains("hidden")){
-			document.documentElement.style.setProperty('--chat-width', "0px");
-			document.documentElement.style.setProperty('--chat-filler', "40px");
-			
-		} else {
-			document.documentElement.style.setProperty('--chat-width', "400px");
+	var chatModule = document.getElementById("chatModule");
+	var chatModuleButton = document.getElementById("chatModuleButton");
+	chatModule.classList.toggle("hidden");
+
+	if (chatModule.classList.contains("hidden")){
+		chatModuleButton.classList.remove("hidden");
+		document.documentElement.style.setProperty('--chat-width', "0px");
+		document.documentElement.style.setProperty('--chat-filler', "40px");
+
+	} else {
+		chatModuleButton.classList.add("hidden");
+		document.documentElement.style.setProperty('--chat-width', "400px");
 			document.documentElement.style.setProperty('--chat-filler', "0px");
 		}
 	}
@@ -1291,15 +1354,27 @@
 	if (screen.height && screen.width && (screen.height*screen.width<400000)){
 		mobile = true;
 	}
-	
-	if (mobile){
-		//toggleChat();
-		document.body.classList.add("mobile");
-		//getById("chatModule").classList.add("hidden");
+
+	function isCompactScreen(){
+		return (window.innerWidth && window.innerWidth <= 760) || (window.innerHeight && window.innerHeight <= 500);
 	}
-	
-	
-	var password = false;
+
+	function useMobileLayout(){
+		return mobile || isCompactScreen();
+	}
+
+	function updateResponsiveLayout(){
+		if (useMobileLayout()){
+			document.body.classList.add("mobile");
+		} else {
+			document.body.classList.remove("mobile");
+		}
+	}
+
+updateResponsiveLayout();
+window.addEventListener("resize", updateResponsiveLayout);
+
+var password = false;
 	if (urlParams.has('password') || urlParams.has('pass') || urlParams.has('pw') || urlParams.has('p')) {
 		password = urlParams.get('password') || urlParams.get('pass') || urlParams.get('pw') || urlParams.get('p');
 	}
@@ -1758,9 +1833,12 @@
 		streamID = "&push="+streamID;
 	}
 	
-	var label = "&label";
-	if (urlParams.has("label") || urlParams.has("l")){
-		label += "=" + (urlParams.get("label") || urlParams.get("l") || "");
+	var label = "";
+	if (urlParams.has("l") && !urlParams.has("label")){
+		label = "&label";
+		if (urlParams.get("l")){
+			label += "=" + encodeURIComponent(urlParams.get("l"));
+		}
 	}
 	
 	savedSession = initialgroups; 
@@ -1982,7 +2060,7 @@
 			roomname = generateString(10);
 		}
 		
-		if (mobile){
+		if (useMobileLayout()){
 			additional2 += "&ad=1&chatbutton=1";
 		} else {
 			additional2 += "&chatbutton=0";
