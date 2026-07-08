@@ -3,7 +3,7 @@
 	<title>Comms app</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
-	<script src="./thirdparty/jquery/jquery-3.6.0.js?asd"></script>
+	<script src="./thirdparty/jquery/jquery-3.6.0.js?v=2"></script>
     <script src="./thirdparty/jquery/jquery-ui.js"></script>
 	<link rel="stylesheet" href="./thirdparty/jquery/jquery-ui.css">
 	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
@@ -20,15 +20,6 @@
 		--chat-width: 400px;
 		--chat-filler: 0px;
 	}
-	* {
-		box-sizing: border-box;
-	}
-
-	html {
-		width: 100%;
-		min-height: 100%;
-	}
-
 	body {
 		padding:0;
 		margin:0;
@@ -40,8 +31,6 @@
 		background: #2e445c;
 		box-shadow:  20px 20px 60px #273a4e, -20px -20px 60px #354e6a;
 		scrollbar-color:#666 #201c29;
-		width: 100%;
-		min-height: 100vh;
 	}
 	iframe {
 		border: 0;
@@ -878,6 +867,13 @@
 		position: relative;
 	}
 	
+	body.mobile,
+	body.mobile *,
+	body.mobile *::before,
+	body.mobile *::after {
+		box-sizing: border-box;
+	}
+
 	body.mobile #containerMenu{
 		position: relative;
 		left: 0px;
@@ -903,12 +899,13 @@
 	body.mobile #containermenu {
 		position: relative;
 		display: flex;
+		align-items: center;
 		flex: 0 0 auto;
 		gap: 0;
 		width: 100vw;
-		height: 64px;
-		min-height: 64px;
-		padding: 0 5px 5px 5px;
+		height: 46px;
+		min-height: 46px;
+		padding: 0 4px;
 		overflow-x: auto;
 		overflow-y: hidden;
 		-webkit-overflow-scrolling: touch;
@@ -918,19 +915,19 @@
 	body.mobile #containermenu .groupContainer {
 		flex: 0 0 auto;
 		max-width: none;
-		min-width: 122px;
 	}
 
 	body.mobile #containermenu .groupContainer > .group {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 112px;
+		width: 108px;
 		max-width: none;
-		height: 48px;
-		margin: 8px 5px 0 5px;
-		padding: 7px 26px 7px 9px;
+		height: 34px;
+		margin: 0 4px;
+		padding: 2px 26px 2px 8px;
 		transform: none;
+		font-size: 13px;
 		line-height: 1.15;
 		overflow: hidden;
 	}
@@ -939,16 +936,32 @@
 		display: block;
 		max-width: 100%;
 		overflow: hidden;
+		white-space: nowrap;
 		text-overflow: ellipsis;
+	}
+
+	body.mobile #containermenu .groupContainer > .group > span br,
+	body.mobile #containermenu .groupContainer > .group > span small {
+		display: none;
 	}
 
 	body.mobile .hotkey {
 		display: none;
 	}
 
+	body.mobile .groupsize {
+		font-size: 11px;
+	}
+
 	body.mobile .groupview {
-		width: 26px;
-		height: 26px;
+		width: 22px;
+		height: 22px;
+		top: 50%;
+		bottom: auto;
+		transform: translateY(-50%);
+		padding: 1px;
+		font-size: 12px;
+		line-height: 16px;
 	}
 
 	body.mobile #iframeContainer{
@@ -992,7 +1005,7 @@
 	body.mobile .tooltip:hover .tooltiptext {
 		display: none;
 	}
-	
+
 	body.mobile #welcomeWindow{
 		position: fixed;
 		height: 100vh;
@@ -1071,7 +1084,7 @@
 		right: 10px;
 		cursor: pointer;
 	}
-	
+
 	body.mobile #chatModuleButton {
 		position: fixed;
 		bottom: 10px;
@@ -1080,33 +1093,40 @@
 	}
 
 	body.mobile #chatModule {
+		display: flex;
+		flex-direction: column;
+		align-self: stretch;
 		left: 10px;
 		right: 10px;
-		top: 72px;
-		bottom: auto;
+		top: 56px;
+		bottom: 64px;
 		width: auto;
 		max-width: none;
-		height: calc(100vh - 82px);
-		height: calc(100dvh - 82px);
+		height: auto;
 		margin: 0;
-		padding: 10px;
-		box-sizing: border-box;
+		padding: 8px;
+	}
+
+	body.mobile #chatModule .xbutton {
+		flex: 0 0 auto;
+		align-self: flex-end;
 	}
 
 	body.mobile #chatBody {
-		left: 10px;
-		right: 10px;
-		top: 48px;
-		bottom: 58px;
-		margin: 0;
+		position: static;
+		flex: 1 1 auto;
+		min-height: 0;
+		width: auto;
+		margin: 0 0 8px 0;
+		overflow-y: auto;
 	}
 
 	body.mobile #chatSendBar {
-		left: 10px;
-		right: 10px;
-		bottom: 10px;
+		position: static;
+		flex: 0 0 auto;
 		display: flex;
 		gap: 8px;
+		width: auto;
 	}
 
 	body.mobile #chatInput {
@@ -1120,61 +1140,6 @@
 		flex: 0 0 auto;
 		margin: 0;
 	}
-
-	@media (max-width: 360px) {
-		body.mobile #containermenu {
-			height: 58px;
-			min-height: 58px;
-			padding: 0 4px 4px 4px;
-		}
-
-		body.mobile #containermenu .groupContainer {
-			min-width: 108px;
-		}
-
-		body.mobile #containermenu .groupContainer > .group {
-			width: 100px;
-			height: 44px;
-			margin: 7px 4px 0 4px;
-			padding: 6px 23px 6px 8px;
-			font-size: 14px;
-		}
-
-		body.mobile .groupview {
-			width: 23px;
-			height: 23px;
-		}
-
-		body.mobile #chatModule {
-			top: 64px;
-			height: calc(100vh - 74px);
-			height: calc(100dvh - 74px);
-		}
-	}
-
-	@media (max-height: 500px) {
-		body.mobile #containermenu {
-			height: 56px;
-			min-height: 56px;
-		}
-
-		body.mobile #containermenu .groupContainer {
-			min-width: 112px;
-		}
-
-		body.mobile #containermenu .groupContainer > .group {
-			width: 104px;
-			height: 42px;
-			margin-top: 6px;
-			font-size: 14px;
-		}
-
-	body.mobile #chatModule {
-		top: 62px;
-		height: calc(100vh - 72px);
-		height: calc(100dvh - 72px);
-	}
-}
 
 	</style>
 </head>
@@ -1277,18 +1242,18 @@
 	}
 	
 	function toggleChat(){
-	var chatModule = document.getElementById("chatModule");
-	var chatModuleButton = document.getElementById("chatModuleButton");
-	chatModule.classList.toggle("hidden");
-
-	if (chatModule.classList.contains("hidden")){
-		chatModuleButton.classList.remove("hidden");
-		document.documentElement.style.setProperty('--chat-width', "0px");
-		document.documentElement.style.setProperty('--chat-filler', "40px");
-
-	} else {
-		chatModuleButton.classList.add("hidden");
-		document.documentElement.style.setProperty('--chat-width', "400px");
+		var chatModule = document.getElementById("chatModule");
+		var chatModuleButton = document.getElementById("chatModuleButton");
+		chatModule.classList.toggle("hidden");
+		
+		if (chatModule.classList.contains("hidden")){
+			chatModuleButton.classList.remove("hidden");
+			document.documentElement.style.setProperty('--chat-width', "0px");
+			document.documentElement.style.setProperty('--chat-filler', "40px");
+			
+		} else {
+			chatModuleButton.classList.add("hidden");
+			document.documentElement.style.setProperty('--chat-width', "400px");
 			document.documentElement.style.setProperty('--chat-filler', "0px");
 		}
 	}
@@ -1351,10 +1316,20 @@
 		mobile = true;
 	}
 	
+	var videoMode = false;
+	if (urlParams.has('video')){
+		videoMode = true;
+	}
+	
+	var chat = true;
+	if (urlParams.has('hidechat')){
+		chat = false;
+	}
+	
 	if (screen.height && screen.width && (screen.height*screen.width<400000)){
 		mobile = true;
 	}
-
+	
 	function isCompactScreen(){
 		return (window.innerWidth && window.innerWidth <= 760) || (window.innerHeight && window.innerHeight <= 500);
 	}
@@ -1371,24 +1346,12 @@
 		}
 	}
 
-updateResponsiveLayout();
-window.addEventListener("resize", updateResponsiveLayout);
-
-var password = false;
-	if (urlParams.has('password') || urlParams.has('pass') || urlParams.has('pw') || urlParams.has('p')) {
-		password = urlParams.get('password') || urlParams.get('pass') || urlParams.get('pw') || urlParams.get('p');
-	}
-	
-	
+	updateResponsiveLayout();
+	window.addEventListener("resize", updateResponsiveLayout);
 	
 	var aspectRatio = 16/9.0;
 	document.documentElement.style.setProperty('--aspect-ratio', aspectRatio);
 	
-	var roomname = false;
-	if (urlParams.has("room") || urlParams.has("r") ||urlParams.has("dir") || urlParams.has("director")){
-		roomname = urlParams.get("room") || urlParams.get("r") ||urlParams.get("dir") || urlParams.get("director");
-		roomname = sanitizeRoomName(roomname);
-	}
 	var savedLastRoom = getStorage("savedRoom_comms");
 	
 	if (savedLastRoom){
@@ -1403,6 +1366,22 @@ var password = false;
 			}
 		} 
 	}
+	
+	
+	var password = false;
+	if (urlParams.has('password') || urlParams.has('pass') || urlParams.has('pw') || urlParams.has('p')) {
+		password = urlParams.get('password') || urlParams.get('pass') || urlParams.get('pw') || urlParams.get('p');
+	}
+	
+	var roomname = false;
+	if (urlParams.has("room") || urlParams.has("r") ||urlParams.has("dir") || urlParams.has("director")){
+		roomname = urlParams.get("room") || urlParams.get("r") ||urlParams.get("dir") || urlParams.get("director");
+		roomname = sanitizeRoomName(roomname) || false;
+	}
+	
+	
+	
+	
 	function randomRoomName(){
 		document.getElementById("roomname").value = generateString(8);
 	}
@@ -1429,7 +1408,11 @@ var password = false;
 				this.onclick = null;
 			}
 			roomname = rid;
+			
+			loadSavedSession(roomname);
 			loadIframe();
+			saveSession();
+			
 			document.getElementById("welcomeWindow").classList.add("fadeout");
 			setTimeout(function(){
 				document.getElementById("welcomeWindow").classList.add("hidden");
@@ -1444,6 +1427,53 @@ var password = false;
 		var temp = document.createElement('div');
 		temp.textContent = string;
 		return temp.innerHTML;
+	}
+
+	function decodeHTML(value) {
+		if (value === null || value === undefined) {
+			return "";
+		}
+		var temp = document.createElement("textarea");
+		temp.innerHTML = value;
+		return temp.value;
+	}
+
+	function replaceURLs(message) {
+		if (message === undefined || message === null) {
+			return "";
+		}
+		var original = decodeHTML(String(message));
+		var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+		var result = "";
+		var lastIndex = 0;
+		var match;
+		while ((match = urlRegex.exec(original)) !== null) {
+			result += sanitize(original.slice(lastIndex, match.index));
+			var url = match[0];
+			var trailing = "";
+			while (/[.,;!:\*\?)]$/.test(url)) {
+				trailing = url.slice(-1) + trailing;
+				url = url.slice(0, -1);
+			}
+			if (url) {
+				var hyperlink = url;
+				if (!/^https?:\/\//i.test(hyperlink)) {
+					hyperlink = "http://" + hyperlink;
+				}
+				var display = url.length > 35 ? url.substring(0, 35) + "..." : url;
+				result += '<a href="' + sanitize(hyperlink) + '" title="Click to open the link in a new tab" target="_blank" rel="noopener noreferrer">' + sanitize(display) + "</a>";
+			} else {
+				result += sanitize(match[0]);
+			}
+			if (trailing) {
+				result += sanitize(trailing);
+			}
+			lastIndex = match.index + match[0].length;
+		}
+		if (lastIndex < original.length) {
+			result += sanitize(original.slice(lastIndex));
+		}
+		return result;
 	}
 
 	function EnterButtonChat(event){
@@ -1509,23 +1539,26 @@ var password = false;
 			/////////////////////////////
 			var label = "";
 			if (message.label){
-				label = message.label;
+				label = sanitize(decodeHTML(message.label));
 			} 
-			
+			var labelPrefix = label ? label + " " : "";
+			var safeMessage = replaceURLs(message.msg);
+			var safeTime = sanitize(time);
+
 			if (message.type == "sent"){
-				msg.innerHTML = "<span class='chat_message chat_sent'>"+message.msg + "  </span><i><small> <small>- "+time+"</small></small></i><span style='display:none'>"+label+"</span>";
+				msg.innerHTML = "<span class='chat_message chat_sent'>"+safeMessage + "  </span><i><small> <small>- "+safeTime+"</small></small></i><span style='display:none'>"+label+"</span>";
 				msg.classList.add("outMessage");
 			} else if (message.type == "recv"){
-				msg.innerHTML = label+"<span class='chat_message chat_recv'>"+message.msg + " </span><i><small> <small>- "+time+"</small></small></i>";
+				msg.innerHTML = labelPrefix+"<span class='chat_message chat_recv'>"+safeMessage + " </span><i><small> <small>- "+safeTime+"</small></small></i>";
 				msg.classList.add("inMessage");
 			} else if (message.type == "action"){
-				msg.innerHTML = label+"<span class='chat_message chat_action'>"+message.msg + " </span><i><small> <small>- "+time+"</small></small></i>";
+				msg.innerHTML = labelPrefix+"<span class='chat_message chat_action'>"+safeMessage + " </span><i><small> <small>- "+safeTime+"</small></small></i>";
 				msg.classList.add("actionMessage");
 			} else if (message.type == "alert"){
-				msg.innerHTML = "<span class='chat_message chat_alert'>"+message.msg + " </span><i><small> <small>- "+time+"</small></small></i>";
+				msg.innerHTML = "<span class='chat_message chat_alert'>"+safeMessage + " </span><i><small> <small>- "+safeTime+"</small></small></i>";
 				msg.classList.add("inMessage");
 			} else {
-				msg.innerHTML = "<span class='chat_message chat_other'>"+message.msg + "  </span><i><small> <small>- "+time+"</small></small></i>";
+				msg.innerHTML = "<span class='chat_message chat_other'>"+safeMessage + "  </span><i><small> <small>- "+safeTime+"</small></small></i>";
 				msg.classList.add("inMessage");
 			}
 			document.getElementById("chatBody").appendChild(msg);
@@ -1539,23 +1572,27 @@ var password = false;
 				/////////////////////////////
 				var label = "";
 				if (messageList[i].label){
-					label = messageList[i].label;
+					label = sanitize(decodeHTML(messageList[i].label));
 				} 
 				
+				var messageContent = replaceURLs(messageList[i].msg);
+				var labelPrefix = label ? label + " " : "";
+				var safeTime = sanitize(time);
+
 				if (messageList[i].type == "sent"){
-					msg.innerHTML = "<span class='chat_message chat_sent'>"+messageList[i].msg + "  </span><i><small> <small>- "+time+"</small></small></i><span style='display:none'>"+label+"</span>";
+					msg.innerHTML = "<span class='chat_message chat_sent'>"+messageContent + "  </span><i><small> <small>- "+safeTime+"</small></small></i><span style='display:none'>"+label+"</span>";
 					msg.classList.add("outMessage");
 				} else if (messageList[i].type == "recv"){
-					msg.innerHTML = label+"<span class='chat_message chat_recv'>"+messageList[i].msg + " </span><i><small> <small>- "+time+"</small></small></i>";
+					msg.innerHTML = labelPrefix+"<span class='chat_message chat_recv'>"+messageContent + " </span><i><small> <small>- "+safeTime+"</small></small></i>";
 					msg.classList.add("inMessage");
 				} else if (messageList[i].type == "action"){
-					msg.innerHTML = label+"<span class='chat_message chat_action'>"+messageList[i].msg + " </span><i><small> <small>- "+time+"</small></small></i>";
+					msg.innerHTML = labelPrefix+"<span class='chat_message chat_action'>"+messageContent + " </span><i><small> <small>- "+safeTime+"</small></small></i>";
 					msg.classList.add("actionMessage");
 				} else if (messageList[i].type == "alert"){
-					msg.innerHTML = "<span class='chat_message chat_alert'>"+messageList[i].msg + " </span><i><small> <small>- "+time+"</small></small></i>";
+					msg.innerHTML = "<span class='chat_message chat_alert'>"+messageContent + " </span><i><small> <small>- "+safeTime+"</small></small></i>";
 					msg.classList.add("inMessage");
 				} else {
-					msg.innerHTML = "<span class='chat_message chat_other'>"+messageList[i].msg + "  </span><i><small> <small>- "+time+"</small></small></i>";
+					msg.innerHTML = "<span class='chat_message chat_other'>"+messageContent + "  </span><i><small> <small>- "+safeTime+"</small></small></i>";
 					msg.classList.add("inMessage");
 				}
 				
@@ -1742,91 +1779,6 @@ var password = false;
 		}
 	}
 	
-	var colors = [
-		"#00AAAA",
-		"#FF0000",
-		"#0000FF",
-		"#AA00AA",
-		"#00FF00",
-		"#AAAA00",
-		"#AACC44",
-		"#CCAA44",
-		"#CC44AA",
-		"#44AACC"
-	];
-	
-	var remoteGroups = {};
-	
-	var initialgroups = {};
-	
-	initialgroups.settings = {};
-	initialgroups.activeGroups = [];
-	initialgroups.activeViewGroups = [];
-	initialgroups.groups = [];
-	
-	
-	var savedSession = getStorage("savedSession_comms");
-	
-	if (savedSession){
-		initialgroups = JSON.parse(savedSession);
-		if (!("activeViewGroups" in initialgroups)){
-			initialgroups.activeViewGroups = [];
-		} else {
-			initialgroups.activeViewGroups.forEach(group=>{
-				if (!initialgroups.groups.includes(group)){
-					initialgroups.groups.push(group);
-				}
-			});
-		}
-	} else {
-		var data = "1";	
-		initialgroups.groups.push(data);
-		
-		var data = "2";
-		initialgroups.groups.push(data);
-		
-		var data = "3";
-		initialgroups.groups.push(data);
-		
-		var data = "4";
-		initialgroups.groups.push(data);
-		
-		var data = "5";
-		initialgroups.groups.push(data);
-
-		var data = "6";
-		initialgroups.groups.push(data);
-	}
-	
-	
-	
-	
-	if (urlParams.has("group") || urlParams.has("groups")){
-		var groups = urlParams.get("group") || urlParams.get("groups");
-		if (groups){
-			groups.split(",").forEach(group=>{
-				if (!initialgroups.groups.includes(group)){
-					initialgroups.groups.push(group);
-					if (!initialgroups.activeGroups.includes(group)){
-						initialgroups.activeGroups.push(group);
-					};
-				}
-			});
-		}
-	}
-	
-	
-	if (urlParams.has("groupview") || urlParams.has("gv")){
-		var viewgroups = urlParams.get("groupview") || urlParams.get("gv");
-		if (viewgroups){
-			viewgroups.split(",").forEach(group=>{
-				if (!initialgroups.groups.includes(group)){
-					initialgroups.groups.push(group);
-				}
-				initialgroups.activeViewGroups.push(group);
-			});
-		}
-	}
 	var streamID = "";
 	if (urlParams.has("push") || urlParams.has("sid")){
 		streamID = urlParams.get("push") || urlParams.get("sid") || "";
@@ -1841,7 +1793,93 @@ var password = false;
 		}
 	}
 	
-	savedSession = initialgroups; 
+	var colors = [
+		"#00AAAA",
+		"#FF0000",
+		"#0000FF",
+		"#AA00AA",
+		"#00FF00",
+		"#AAAA00",
+		"#AACC44",
+		"#CCAA44",
+		"#CC44AA",
+		"#44AACC"
+	];
+	
+	var remoteGroups = {};
+	var savedSession = {};
+	var initialgroups = {};
+	
+	initialgroups.settings = {};
+	initialgroups.activeGroups = [];
+	initialgroups.activeViewGroups = [];
+	initialgroups.groups = [];
+	
+	
+	function loadSavedSession(roomname){
+	
+		savedSession = getStorage("savedSession_comms_"+roomname) || getStorage("savedSession_comms");
+		
+		if (savedSession){
+			initialgroups = JSON.parse(savedSession);
+			if (!("activeViewGroups" in initialgroups)){
+				initialgroups.activeViewGroups = [];
+			} else {
+				initialgroups.activeViewGroups.forEach(group=>{
+					if (!initialgroups.groups.includes(group)){
+						initialgroups.groups.push(group);
+					}
+				});
+			}
+		} else {
+			var data = "1";	
+			initialgroups.groups.push(data);
+			
+			var data = "2";
+			initialgroups.groups.push(data);
+			
+			var data = "3";
+			initialgroups.groups.push(data);
+			
+			var data = "4";
+			initialgroups.groups.push(data);
+			
+			var data = "5";
+			initialgroups.groups.push(data);
+
+			var data = "6";
+			initialgroups.groups.push(data);
+		}
+		
+		if (urlParams.has("group") || urlParams.has("groups")){
+			var groups = urlParams.get("group") || urlParams.get("groups");
+			initialgroups.groups = [];
+			if (groups){
+				groups.split(",").forEach(group=>{
+					if (!initialgroups.groups.includes(group)){
+						initialgroups.groups.push(group);
+						//if (!initialgroups.activeGroups.includes(group)){
+						//	initialgroups.activeGroups.push(group);
+						//};
+					}
+				});
+			}
+		}
+		
+		if (urlParams.has("groupview") || urlParams.has("gv")){
+			var viewgroups = urlParams.get("groupview") || urlParams.get("gv");
+			if (viewgroups){
+				viewgroups.split(",").forEach(group=>{
+					if (!initialgroups.groups.includes(group)){
+						initialgroups.groups.push(group);
+					}
+					initialgroups.activeViewGroups.push(group);
+				});
+			}
+		}
+		
+		savedSession = initialgroups; 
+	}
 	
 	if (iframe){
 		iframe.contentWindow.postMessage({ groups: savedSession.activeGroups ,  groupView: savedSession.activeViewGroups }, "*"); 
@@ -1991,7 +2029,7 @@ var password = false;
 	
 	function generateString(LLL = 7){
 		var text = "";
-		var words = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","I","his","they","be","at","one","have","this","from","or","had","by","word","but","what","some","we","can","out","other","were","all","there","when","up","use","your","how","said","an","each","she","which","do","their","time","if","will","way","about","many","then","them","write","would","like","so","these","her","long","make","thing","see","him","two","has","look","more","day","could","go","come","did","number","sound","no","most","people","my","over","know","water","than","call","first","who","may","down","side","been","now","find","any","new","work","part","take","get","place","made","live","where","after","back","little","only","round","man","year","came","show","every","good","me","give","our","under","name","very","through","just","form","sentence","great","think","say","help","low","line","differ","turn","cause","much","mean","before","move","right","boy","old","too","same","tell","does","set","three","want","air","well","also","play","small","end","put","home","read","hand","port","large","spell","add","even","land","here","must","big","high","such","follow","act","why","ask","men","change","went","light","kind","off","need","house","picture","try","us","again","animal","point","mother","world","near","build","self","earth","father","head","stand","own","page","should","country","found","answer","school","grow","study","still","learn","plant","cover","food","sun","four","between","state","keep","eye","never","last","let","thought","city","tree","cross","farm","hard","start","might","story","saw","far","sea","draw","left","late","run","don't","while","press","close","night","real","life","few","north","open","seem","together","next","white","children","begin","got","walk","example","ease","paper","group","always","music","those","both","mark","often","letter","until","mile","river","car","feet","care","second","book","carry","took","science","eat","room","friend","began","idea","fish","mountain","stop","once","base","hear","horse","cut","sure","watch","color","face","wood","main","enough","plain","girl","usual","young","ready","above","ever","red","list","though","feel","talk","bird","soon","body","dog","family","direct","pose","leave","song","measure","door","product","black","short","numeral","class","wind","question","happen","complete","ship","area","half","rock","order","fire","south","problem","piece","told","knew","pass","since","top","whole","king","space","heard","best","hour","better","true .","during","hundred","five","remember","step","early","hold","west","ground","interest","reach","fast","verb","sing","listen","six","table","travel","less","morning","ten","simple","several","vowel","toward","war","lay","against","pattern","slow","center","love","person","money","serve","appear","road","map","rain","rule","govern","pull","cold","notice","voice","unit","power","town","fine","certain","fly","fall","lead","cry","dark","machine","note","wait","plan","figure","star","box","noun","field","rest","correct","able","pound","done","beauty","drive","stood","contain","front","teach","week","final","gave","green","oh","quick","develop","ocean","warm","free","minute","strong","special","mind","behind","clear","tail","produce","fact","street","inch","multiply","nothing","course","stay","wheel","full","force","blue","object","decide","surface","deep","moon","island","foot","system","busy","test","record","boat","common","gold","possible","plane","stead","dry","wonder","laugh","thousand","ago","ran","check","game","shape","equate","hot","miss","brought","heat","snow","tire","bring","yes","distant","fill","east","paint","language","among","grand","ball","yet","wave","drop","heart","am","present","heavy","dance","engine","position","arm","wide","sail","material","size","vary","settle","speak","weight","general","ice","matter","circle","pair","include","divide","syllable","felt","perhaps","pick","sudden","count","square","reason","length","represent","art","subject","region","energy","hunt","probable","bed","brother","egg","ride","cell","believe","fraction","forest","sit","race","window","store","summer","train","sleep","prove","lone","leg","exercise","wall","catch","mount","wish","sky","board","joy","winter","sat","written","wild","instrument","kept","glass","grass","cow","job","edge","sign","visit","past","soft","fun","bright","gas","weather","month","million","bear","finish","happy","hope","flower","clothe","strange","gone","jump","baby","eight","village","meet","root","buy","raise","solve","metal","whether","push","seven","paragraph","third","shall","held","hair","describe","cook","floor","either","result","burn","hill","safe","cat","century","consider","type","law","bit","coast","copy","phrase","silent","tall","sand","soil","roll","temperature","finger","industry","value","fight","lie","beat","excite","natural","view","sense","ear","else","quite","broke","case","middle","kill","son","lake","moment","scale","loud","spring","observe","child","straight","consonant","nation","dictionary","milk","speed","method","organ","pay","age","section","dress","cloud","surprise","quiet","stone","tiny","climb","cool","design","poor","lot","experiment","bottom","key","iron","single","stick","flat","twenty","skin","smile","crease","hole","trade","melody","trip","office","receive","row","mouth","exact","symbol","die","least","trouble","shout","except","wrote","seed","tone","join","suggest","clean","break","lady","yard","rise","bad","blow","oil","blood","touch","grew","cent","mix","team","wire","cost","lost","brown","wear","garden","equal","sent","choose","fell","fit","flow","fair","bank","collect","save","control","decimal","gentle","woman","captain","practice","separate","difficult","doctor","please","protect","noon","whose","locate","ring","character","insect","caught","period","indicate","radio","spoke","atom","human","history","effect","electric","expect","crop","modern","element","hit","student","corner","party","supply","bone","rail","imagine","provide","agree","thus","capital","won't","chair","danger","fruit","rich","thick","soldier","process","operate","guess","necessary","sharp","wing","create","neighbor","wash","bat","rather","crowd","corn","compare","poem","string","bell","depend","meat","rub","tube","famous","dollar","stream","fear","sight","thin","triangle","planet","hurry","chief","colony","clock","mine","tie","enter","major","fresh","search","send","yellow","gun","allow","print","dead","spot","desert","suit","current","lift","rose","continue","block","chart","hat","sell","success","company","subtract","event","particular","deal","swim","term","opposite","wife","shoe","shoulder","spread","arrange","camp","invent","cotton","born","determine","quart","nine","truck","noise","level","chance","gather","shop","stretch","throw","shine","property","column","molecule","select","wrong","gray","repeat","require","broad","prepare","salt","nose","plural","anger","claim","continent","oxygen","sugar","death","pretty","skill","women","season","solution","magnet","silver","thank","branch","match","suffix","especially","fig","afraid","huge","sister","steel","discuss","forward","similar","guide","experience","score","apple","bought","led","pitch","coat","mass","card","band","rope","slip","win","dream","evening","condition","feed","tool","total","basic","smell","valley","nor","double","seat","arrive","master","track","parent","shore","division","sheet","substance","favor","connect","post","spend","chord","fat","glad","original","share","station","dad","bread","charge","proper","bar","offer","segment","slave","duck","instant","market","degree","populate","chick","dear","enemy","reply","drink","occur","support","speech","nature","range","steam","motion","path","liquid","log","meant","quotient","teeth","shell","neck"];
+		var words = ["the","of","to","and","a","in","is","it","you","that","he","was","for","on","are","with","as","I","his","they","be","at","one","have","this","from","or","had","by","word","but","what","some","we","can","out","other","were","all","there","when","up","use","your","how","said","an","each","she","which","do","their","time","if","will","way","about","many","then","them","write","would","like","so","these","her","long","make","thing","see","him","two","has","look","more","day","could","go","come","did","number","sound","no","most","people","my","over","know","water","than","call","first","who","may","down","side","been","now","find","any","new","work","part","take","get","place","made","live","where","after","back","little","only","round","man","year","came","show","every","good","me","give","our","under","name","very","through","just","form","sentence","great","think","say","help","low","line","differ","turn","cause","much","mean","before","move","right","boy","old","too","same","tell","does","set","three","want","air","well","also","play","small","end","put","home","read","hand","port","large","spell","add","even","land","here","must","big","high","such","follow","act","why","ask","men","change","went","light","kind","off","need","house","picture","try","us","again","animal","point","mother","world","near","build","self","earth","father","head","stand","own","page","should","country","found","answer","school","grow","study","still","learn","plant","cover","food","sun","four","between","state","keep","eye","never","last","let","thought","city","tree","cross","farm","hard","start","might","story","saw","far","sea","draw","left","late","run","dont","while","press","close","night","real","life","few","north","open","seem","together","next","white","children","begin","got","walk","example","ease","paper","group","always","music","those","both","mark","often","letter","until","mile","river","car","feet","care","second","book","carry","took","science","eat","room","friend","began","idea","fish","mountain","stop","once","base","hear","horse","cut","sure","watch","color","face","wood","main","enough","plain","girl","usual","young","ready","above","ever","red","list","though","feel","talk","bird","soon","body","dog","family","direct","pose","leave","song","measure","door","product","black","short","numeral","class","wind","question","happen","complete","ship","area","half","rock","order","fire","south","problem","piece","told","knew","pass","since","top","whole","king","space","heard","best","hour","better","true .","during","hundred","five","remember","step","early","hold","west","ground","interest","reach","fast","verb","sing","listen","six","table","travel","less","morning","ten","simple","several","vowel","toward","war","lay","against","pattern","slow","center","love","person","money","serve","appear","road","map","rain","rule","govern","pull","cold","notice","voice","unit","power","town","fine","certain","fly","fall","lead","cry","dark","machine","note","wait","plan","figure","star","box","noun","field","rest","correct","able","pound","done","beauty","drive","stood","contain","front","teach","week","final","gave","green","oh","quick","develop","ocean","warm","free","minute","strong","special","mind","behind","clear","tail","produce","fact","street","inch","multiply","nothing","course","stay","wheel","full","force","blue","object","decide","surface","deep","moon","island","foot","system","busy","test","record","boat","common","gold","possible","plane","stead","dry","wonder","laugh","thousand","ago","ran","check","game","shape","equate","hot","miss","brought","heat","snow","tire","bring","yes","distant","fill","east","paint","language","among","grand","ball","yet","wave","drop","heart","am","present","heavy","dance","engine","position","arm","wide","sail","material","size","vary","settle","speak","weight","general","ice","matter","circle","pair","include","divide","syllable","felt","perhaps","pick","sudden","count","square","reason","length","represent","art","subject","region","energy","hunt","probable","bed","brother","egg","ride","cell","believe","fraction","forest","sit","race","window","store","summer","train","sleep","prove","lone","leg","exercise","wall","catch","mount","wish","sky","board","joy","winter","sat","written","wild","instrument","kept","glass","grass","cow","job","edge","sign","visit","past","soft","fun","bright","gas","weather","month","million","bear","finish","happy","hope","flower","clothe","strange","gone","jump","baby","eight","village","meet","root","buy","raise","solve","metal","whether","push","seven","paragraph","third","shall","held","hair","describe","cook","floor","either","result","burn","hill","safe","cat","century","consider","type","law","bit","coast","copy","phrase","silent","tall","sand","soil","roll","temperature","finger","industry","value","fight","lie","beat","excite","natural","view","sense","ear","else","quite","broke","case","middle","kill","son","lake","moment","scale","loud","spring","observe","child","straight","consonant","nation","dictionary","milk","speed","method","organ","pay","age","section","dress","cloud","surprise","quiet","stone","tiny","climb","cool","design","poor","lot","experiment","bottom","key","iron","single","stick","flat","twenty","skin","smile","crease","hole","trade","melody","trip","office","receive","row","mouth","exact","symbol","die","least","trouble","shout","except","wrote","seed","tone","join","suggest","clean","break","lady","yard","rise","bad","blow","oil","blood","touch","grew","cent","mix","team","wire","cost","lost","brown","wear","garden","equal","sent","choose","fell","fit","flow","fair","bank","collect","save","control","decimal","gentle","woman","captain","practice","separate","difficult","doctor","please","protect","noon","whose","locate","ring","character","insect","caught","period","indicate","radio","spoke","atom","human","history","effect","electric","expect","crop","modern","element","hit","student","corner","party","supply","bone","rail","imagine","provide","agree","thus","capital","wont","chair","danger","fruit","rich","thick","soldier","process","operate","guess","necessary","sharp","wing","create","neighbor","wash","bat","rather","crowd","corn","compare","poem","string","bell","depend","meat","rub","tube","famous","dollar","stream","fear","sight","thin","triangle","planet","hurry","chief","colony","clock","mine","tie","enter","major","fresh","search","send","yellow","gun","allow","print","dead","spot","desert","suit","current","lift","rose","continue","block","chart","hat","sell","success","company","subtract","event","particular","deal","swim","term","opposite","wife","shoe","shoulder","spread","arrange","camp","invent","cotton","born","determine","quart","nine","truck","noise","level","chance","gather","shop","stretch","throw","shine","property","column","molecule","select","wrong","gray","repeat","require","broad","prepare","salt","nose","plural","anger","claim","continent","oxygen","sugar","death","pretty","skill","women","season","solution","magnet","silver","thank","branch","match","suffix","especially","fig","afraid","huge","sister","steel","discuss","forward","similar","guide","experience","score","apple","bought","led","pitch","coat","mass","card","band","rope","slip","win","dream","evening","condition","feed","tool","total","basic","smell","valley","nor","double","seat","arrive","master","track","parent","shore","division","sheet","substance","favor","connect","post","spend","chord","fat","glad","original","share","station","dad","bread","charge","proper","bar","offer","segment","slave","duck","instant","market","degree","populate","chick","dear","enemy","reply","drink","occur","support","speech","nature","range","steam","motion","path","liquid","log","meant","quotient","teeth","shell","neck"];
 		
 		for (var i=0;i<2;i++){
 			try{
@@ -2051,9 +2089,11 @@ var password = false;
 		}
 		roomname = sanitizeRoomName(roomname);
 	
-		
 		var iframeContainer = document.getElementById("iframeContainer");
-		iframe.allow = "autoplay;camera;microphone;fullscreen;picture-in-picture;display-capture;";
+		iframe.allow = "autoplay;camera;microphone;fullscreen;picture-in-picture;display-capture;screen-wake-lock;accelerometer;midi;geolocation;gyroscope;";
+		iframe.setAttribute("allowtransparency", "true");
+		iframe.setAttribute("crossorigin", "anonymous");
+		iframe.setAttribute("credentialless", "true");
 		iframe.id = "vdoninja";
 		
 		if (!roomname){
@@ -2071,10 +2111,15 @@ var password = false;
 		var chatmsg = "Welcome to the Comms app. Select a group to participate in.";
 		chatmsg = encodeURIComponent(chatmsg);
 		
+		var vtype = "&vd=0";
+		if (videoMode){
+			vtype = "&ad=0";
+		}
+		
 		if (window.location.hostname == "comms.cam"){
-			var iframesrc = "https://vdo.ninja/alpha/?"+urlEdited+"&controlbarspace&volumecontrol&sharperscreen&groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&vd=0&webcam&nvb&sstype=3&ssb&showlabel=toprounded&labelsize=85&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label+"&chatmsg="+chatmsg;
+			var iframesrc = "https://vdo.ninja/?"+urlEdited+vtype+"&controlbarspace&volumecontrol&sharperscreen&groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&webcam&nvb&sstype=3&ssb&showlabel=toprounded&labelsize=85&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label+"&chatmsg="+chatmsg;
 		} else {
-			var iframesrc = "./index.html?"+urlEdited+"&controlbarspace&volumecontrol&sharperscreen&groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&vd=0&webcam&nvb&sstype=3&ssb&showlabel=toprounded&labelsize=85&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label+"&chatmsg="+chatmsg;
+			var iframesrc = "./index.html?"+urlEdited+vtype+"&controlbarspace&volumecontrol&sharperscreen&groupmode&novice&ltb=350&minipreview&transparent&hideheader&margin&rounded&hidetranslate&cleandirector&webcam&nvb&sstype=3&ssb&showlabel=toprounded&labelsize=85&style=2&room="+roomname+additional+additional2+"&b64css="+injectCSS+streamID+label+"&chatmsg="+chatmsg;
 		}
 		
 		
@@ -2088,12 +2133,29 @@ var password = false;
 			drawGroup(savedSession.groups[i]);
 		}
 		
-		if (!mobile){
+		if (!useMobileLayout()){
 			document.getElementById("chatModule").classList.remove("hidden");
+			if (!chat){
+				toggleChat();
+			}
+		} else if (chat){
+			document.getElementById("chatModuleButton").classList.remove("hidden");
+			document.documentElement.style.setProperty('--chat-width', "0px");
+			document.documentElement.style.setProperty('--chat-filler', "40px");
 		}
+		
+		
 		
 		iframe.onload = function(){
 			iframe.contentWindow.postMessage({ groups: savedSession.activeGroups ,  groupView: savedSession.activeViewGroups }, "*"); 
+		}
+		
+		var params = window.location.search || "";
+		if (params.startsWith("?")){
+			params = params.slice(1);
+			iframesrc = iframesrc + "&" + params
+		} else {
+			iframesrc = iframesrc + params
 		}
 		
 		iframe.src = iframesrc;
@@ -2353,7 +2415,7 @@ var password = false;
 		group.appendChild(name);
 		name.groupID = groupID;
 		name.onclick = function(e){
-			if (e.ctrlKey){
+			if (e.ctrlKey || e.metaKey){
 				var nn = prompt("Rename this group", this.groupID);
 				if (this.groupID == nn){
 					name.innerHTML = "group: "+nn;
@@ -2553,7 +2615,7 @@ var password = false;
 				}
 			}
 		}
-		setStorage("savedSession_comms", JSON.stringify(savedSession));
+		setStorage("savedSession_comms_"+roomname, JSON.stringify(savedSession));
 		
 		if (iframe){
 			iframe.contentWindow.postMessage({ groups: savedSession.activeGroups , groupView: savedSession.activeViewGroups}, "*"); 
@@ -2587,7 +2649,9 @@ var password = false;
 	});
 	
 	if (roomname){ 
+		loadSavedSession(roomname);
 		loadIframe();
+		saveSession();
 	} else {
 		document.getElementById("welcomeWindow").style.display = "block";
 	}
