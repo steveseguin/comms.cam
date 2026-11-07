@@ -2406,10 +2406,10 @@
 		
 		
 		if (savedSession.aliases && savedSession.aliases[groupID]){
-			name.innerHTML = savedSession.aliases[groupID];
-			name.innerHTML += "<br /><small>group: "+groupID+"</small>";
+			name.innerHTML = sanitize(savedSession.aliases[groupID]);
+			name.innerHTML += "<br /><small>group: "+sanitize(groupID)+"</small>";
 		} else {
-			name.innerHTML = "group: "+groupID;
+			name.innerHTML = "group: "+sanitize(groupID);
 		}
 		name.title = "Hold CTRL and click to give this group a custom label";
 		group.appendChild(name);
@@ -2418,12 +2418,12 @@
 			if (e.ctrlKey || e.metaKey){
 				var nn = prompt("Rename this group", this.groupID);
 				if (this.groupID == nn){
-					name.innerHTML = "group: "+nn;
+					name.innerHTML = "group: "+sanitize(nn);
 					delete group.dataset.alias;
 					//delete savedSession.aliases[this.groupID];
 				} else if (nn){
-					name.innerHTML = nn;
-					name.innerHTML += "<br /><small>group: "+groupID+"</small>";
+					name.innerHTML = sanitize(nn);
+					name.innerHTML += "<br /><small>group: "+sanitize(groupID)+"</small>";
 					group.dataset.alias = nn;
 					//savedSession.aliases[this.groupID] = nn;
 				}
