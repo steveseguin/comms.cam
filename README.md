@@ -60,3 +60,14 @@ http://localhost:8080/comms.html?room=TestRoom&mobile=1
 When hosted on `comms.cam`, the wrapper loads the current VDO.Ninja app from
 `https://vdo.ninja/alpha/`. Local standalone testing only exercises the wrapper
 unless a matching VDO.Ninja checkout is also present.
+
+## Regression Tests
+
+Run the dependency-free group label checks with Node.js 18 or newer:
+
+```bash
+node --test tests/group-labels.test.cjs
+```
+
+These tests execute the production group renderer with an inert DOM fixture.
+They check label escaping and routing identifiers, not live audio or browser behavior.
